@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOYAH! Birthday Edition 🏆</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@400;900&family=Rowdies:wght@300;700&family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        
+        .screen {
+         background-size: cover;
+         background-position: center;
+         background-repeat: no-repeat;
+         position: relative;
+        }
+
+  
+        .screen::before {
+          content: "";
+         position: absolute;
+         top: 0; left: 0; width: 100%; height: 100%;
+         background: rgba(0, 0, 0, 0.6); 
+         z-index: -1;
+        }
+
+      
+         #s1 { background-image: url('1.jpeg');background-position: center; }
+         #s2 { background-image: url('10.jpg');background-position: center; }
+         #final { background-image: url('6.jpeg'); }
+
+
+        :root {
+            --primary: #ff0055;
+            --secondary: #00ffcc;
+            --bg-dark: #020205;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+
+        body { 
+            background: var(--bg-dark); 
+            color: white; 
+            font-family: 'Rowdies', sans-serif; 
+            overflow: hidden;
+            text-align: center;
+        }
+
+      
+        h1 { font-family: 'Bangers', cursive; font-size: 5.5rem; color: var(--primary); text-shadow: 0 0 20px var(--primary), 5px 5px 0px #000; line-height: 1; margin-bottom: 20px; }
+        h2 { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; color: var(--secondary); margin-bottom: 15px; }
+        p { font-size: 1.4rem; color: #ccc; line-height: 1.4; max-width: 800px; }
+
+    
+        .screen { 
+            display: none; height: 100vh; width: 100vw;
+            flex-direction: column; justify-content: center; align-items: center; 
+            padding: 30px; position: absolute; top: 0; left: 0;
+            background: var(--bg-dark);
+        }
+        .active { display: flex; animation: zoomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        @keyframes zoomIn { from { opacity: 0; transform: scale(1.1); } to { opacity: 1; transform: scale(1); } }
+
+     
+        .btn {
+            background: var(--primary); color: white; border: none; padding: 20px 50px;
+            font-family: 'Bangers'; font-size: 2.2rem; cursor: pointer; border-radius: 15px;
+            box-shadow: 0 8px 0px #80002a, 0 0 30px rgba(255, 0, 85, 0.5);
+            transition: 0.2s; margin-top: 30px; text-transform: uppercase; letter-spacing: 2px;
+        }
+        .btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 12px 0px #80002a, 0 0 50px rgba(255, 0, 85, 0.7); }
+        .btn:active { transform: translateY(5px); box-shadow: 0 2px 0px #80002a; }
+
+       
+        .content-box {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--secondary);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 750px;
+            text-align: left;
+            font-family: 'Montserrat', sans-serif;
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+        .content-box p {
+            font-size: 1.2rem; color: #eee; margin-bottom: 20px; line-height: 1.6;
+        }
+
+     
+        .poetry-box {
+            font-family: 'sans-serif' , cursive; font-size: 1.8rem; color: #fff;
+            line-height: 1.4; text-align: center; padding: 35px;
+            background: rgba(255, 0, 85, 0.05); border-radius: 40px;
+            border: 2px dashed var(--primary); max-width: 700px;
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+        .poetry-box p { margin-bottom: 25px; color: #fff; }
+
+       
+        .mission-frame {
+            width: 85%; max-width: 400px; height: 350px;
+            border: 5px solid var(--primary); border-radius: 20px;
+            background-size: cover; background-position: center;
+            box-shadow: 0 0 40px rgba(255, 0, 85, 0.3); margin-bottom: 15px;
+            cursor: pointer; position: relative;
+        }
+        .mission-frame::after {
+            content: "TAP FOR SECRET 🔓"; position: absolute; bottom: 10px; left: 50%;
+            transform: translateX(-50%); font-size: 0.8rem; background: rgba(0,0,0,0.7);
+            padding: 5px 10px; border-radius: 10px; color: var(--secondary); font-family: 'Orbitron';
+        }
+
+        
+        #secret-popup {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center;
+        }
+        .popup-box {
+            background: #111; border: 3px solid var(--primary); padding: 30px;
+            border-radius: 20px; max-width: 320px; text-align: center;
+            box-shadow: 0 0 30px var(--primary); animation: popIn 0.3s ease;
+        }
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .popup-box h3 { font-family: 'Bangers'; color: var(--primary); font-size: 2rem; margin-bottom: 15px; }
+        .popup-box p { font-family: 'Montserrat'; font-size: 1rem; color: #fff; margin-bottom: 20px; }
+
+    
+        .stats-wrap { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px; }
+        .stat-item { background: #111; padding: 20px; border-radius: 15px; border-bottom: 4px solid var(--secondary); width: 220px; }
+        .stat-val { font-size: 2.2rem; font-family: 'Bangers'; color: var(--secondary); }
+
+        #mute-btn { position: fixed; bottom: 20px; left: 20px; z-index: 999; background: var(--primary); border: none; color: white; border-radius: 50%; width: 55px; height: 55px; font-size: 1.3rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop><source src="JENNIE.mp3" type="audio/mpeg"></audio>
+    <button id="mute-btn" onclick="toggleMute()">🔊</button>
+
+    <div id="secret-popup" onclick="hideSecret()">
+        <div class="popup-box" onclick="event.stopPropagation()">
+            <h3>ENCRYPTED NOTE</h3>
+            <p id="secret-text">Secret message goes here.</p>
+            <button class="btn" style="padding: 10px 20px; font-size: 1.2rem; margin-top: 0;" onclick="hideSecret()">CLOSE</button>
+        </div>
+    </div>
+
+    <div id="s1" class="screen active">
+        <h2 style="letter-spacing: 8px;">V.2026 UNLOCKED</h2>
+        <h1>LEVEL UP!</h1>
+        <p>A Legendary Player is celebrating her spawning day! Do you wish to enter the party lobby?</p>
+        <button class="btn" onclick="startExperience()">CONNECT TO SERVER ➔</button>
+    </div>
+
+    <div id="s2" class="screen">
+        <h1 id="decor-title" style="color: #222;">ᴢᴇɴ ʀᴇᴀᴘᴇʀ OFFLINE</h1>
+        <p>The party lights are disconnected. We need full Jennie power!</p>
+        <button class="btn" id="light-btn" onclick="turnOnLights()">ACTIVATE SHRUTI CORE</button>
+        <div id="big-cake" style="font-size: 150px; display: none; filter: drop-shadow(0 0 30px gold);">🎂</div>
+        <button class="btn" id="cake-btn" style="display:none;" onclick="showCake()">CLAIM BIRTHDAY AIRDROP 🎁</button>
+        <button class="btn" id="next-btn" style="display:none;" onclick="show('s3')">PROCEED TO STATS ➔</button>
+    </div>
+
+    <div id="s3" class="screen">
+        <h1>PLAYER STATS</h1>
+        <div class="stats-wrap">
+            <div class="stat-item"><div class="stat-val">RANK</div><p>Rnk khelti hai???</p></div>
+            <div class="stat-item"><div class="stat-val">IQ</div><p>Follows u throught <br> the game <br></p></div>
+            <div class="stat-item"><div class="stat-val">VIBE</div><p>100% match</p></div>
+            <div class="stat-item"><div class="stat-val">ROLE</div><p>Supporter/Lisntner<br>/Yapper(wish someday)</p></div>
+        </div>
+        <button class="btn" onclick="show('s4')">READ PLAYER LORE ➔</button>
+    </div>
+
+    <div id="s4" class="screen">
+        <h1>THE LORE</h1>
+        <div class="content-box">
+            <h2 style="color: yellow; font-family: 'Bangers';">UNLOCKED: "The Perfect Teammate"</h2>
+            <p>Meeting you in <b>Free Fire</b> wasn't something i expected. Most people just play the game, but with you, it's different. You've become the person I trust when the zone is shrinking and when life gets loud.</p>
+            <p>You’re not just a online-friend," you’re a <b>My besite or Homie Girl</b>. Your gameplay is a power-up, and your friendship is the ultimate streak, It wouldn't be wrong to say but when u met me in game (june approx) I was deciding to leave that and delete it for ever... but now it's not just a game its a pathway to spend time with u cuz i have no other source to contact u beside the game (except insta lately)..... Now if i uninstall the game it would because u left me or we ain't close anymore orelse no one gonna stop me playin FF..</p>
+        </div>
+        <button class="btn" onclick="show('m1')">OPEN MEMORY VAULT ➔</button>
+    </div>
+
+    <div id="m1" class="screen">
+        <h2>MISSION 01: THE Meetup</h2>
+        <div class="mission-frame" style="background-image: url('2.jpeg')" onclick="showSecret(1)"></div>
+        <button class="btn" onclick="show('m2')">NEXT MISSION ➔</button>
+    </div>
+
+    <div id="m2" class="screen">
+        <h2>MISSION 02: SYNCED UP</h2>
+        <div class="mission-frame" style="background-image: url('3.jpeg');" onclick="showSecret(2)"></div>
+        <button class="btn" onclick="show('m3')">NEXT MISSION ➔</button>
+    </div>
+
+    <div id="m3" class="screen">
+        <h2>MISSION 03: BOOYAH MOMENT</h2>
+        <div class="mission-frame" style="background-image: url('5.jpeg');" onclick="showSecret(3)"></div>
+        <button class="btn" onclick="show('m4')">NEXT MISSION ➔</button>
+    </div>
+
+    <div id="m4" class="screen">
+        <h2>MISSION 04: FOREVER DUO</h2>
+        <div class="mission-frame" style="background-image: url('14.jpeg');" onclick="showSecret(4)"></div>
+        <button class="btn" onclick="show('m5')">NEXT MISSION ➔</button>
+    </div>
+
+    <div id="m5" class="screen">
+        <h2>MISSION 05: THE LISNTER and Yapper</h2>
+        <div class="mission-frame" style="background-image: url('13.jpg');" onclick="showSecret(5)"></div>
+        <button class="btn" onclick="show('m6')">NEXT MISSION ➔</button>
+    </div>
+
+    <div id="m6" class="screen">
+        <h2>MISSION 06: Cutie/Fine shawty/ Divaaaaa</h2>
+        <div class="mission-frame" style="background-image: url('12.jpg');" onclick="showSecret(6)"></div>
+        <button class="btn" onclick="show('p1')">SECRET UNLOCKED ➔</button>
+    </div>
+
+    <div id="p1" class="screen">
+        <h2 style="color: var(--primary);">Message for you:- </h2>
+        <div class="poetry-box">
+            
+                We met in a game, just two strangers online,
+             <br>No idea our talks would slowly align.<br>
+             <br>From random matches to laughs every day,<br>
+             <br> Somehow your presence makes everything okay.<br>
+
+             <br>What started as gaming turned into something more,<br>
+             <br>Now our chats feel warmer than ever before.<br>
+             <br>Miles apart yet our friendship feels true,<br>
+             <br>And every good moment somehow includes you.<br>
+
+             <br>I’m sorry for whatever happened yesterday,<br>
+             <br>Please forget it and don’t let it push us away.<br>
+             <br> Our friendship means more than I can explain,<br>
+             <br> I promise it won’t ever happen again. 🙏✨ <br>
+        
+        </div>
+        <button class="btn" onclick="show('p2')">CONTINUE ➔</button>
+    </div>
+
+    <div id="p2" class="screen">
+        <h2 style="color: var(--secondary);">Another one</h2>
+        <div class="poetry-box">
+            
+        <br>आपण एका गेममध्ये भेटलो, फक्त दोन अनोळखी ऑनलाइन,<br>
+        <br>कधी वाटलंच नव्हतं की आपल्या गोष्टी हळूहळू जुळतील. <br>
+        <br>रँडम मॅचेसपासून रोजच्या रात्रीच्या गप्पांपर्यंत,<br> 
+        <br>कसं कोण जाणे, पण तुझी उपस्थिती खूप योग्य वाटते. <br>
+
+        <br>कधी कधी मी विचार करतो, जर आपण समोरासमोर भेटलो असतो, <br>
+        <br>कदाचित एखाद्या शांत ठिकाणी आपण एकत्र फिरलो असतो<br>
+        <br>चहाच्या कपावर हसत हसत दिवसभर गप्पा मारल्या असत्या,<br>
+        <br>आणि विसरलो असतो की आपली भेट एका गेममधून झाली होती.<br>
+
+        <br>कदाचित आपण जुन्या मित्रांसारखे हसून भेटलो असतो,<br>
+        <br>एखाद्या रस्त्यावर चालताना आपल्या गोष्टी शेअर केल्या असत्या..<br>
+        <br>आणि जर तो दिवस कधी आला तर मी हलकेच म्हणेन:-<br>
+        <br>Will you go a whole day out fun with me? <br>
+        </div>
+        <button class="btn" onclick="show('c1')">READ CHAPTERS ➔</button>
+    </div>
+
+    <div id="c1" class="screen">
+        <h2 style="color: var(--primary);">CHAPTER 01: OUR STORY</h2>
+        <div class="content-box">
+            <p><b>Small Effort hope u wil read :</b>Your presence means a lot to me, more than I can properly put into words. Whenever u r happy, it genuinely makes me happy too. When you is sad or disturbed, I feel like I just want to be there to listen and support you in whatever way I can. Even if you are angry sometimes, it still matters to me because you will always matter to me. No matter what mood you are in, having you in my life and being able to talk to you means something really special to me. </p> <br>
+            <p> तुला कदाचित अजिबात कल्पना नसेल की तू माझ्यासाठी किती महत्त्वाची आहेस. आपण अजून प्रत्यक्षात भेटलो नाही आणि आपली ओळख एका गेममधून ऑनलाइन सुरू झाली, तरीसुद्धा तुझी उपस्थिती माझ्या रोजच्या आयुष्यात खूप महत्त्वाची आहे. तुझ्याशी बोलणं, रँडम गोष्टी शेअर करणं, छोट्या-छोट्या गोष्टींवर हसणं आणि फक्त तू आहेस ही जाणीव असणं माझा दिवस चांगला बनवतं. काही लोकांना वाटतं की ऑनलाइन मैत्री एवढी खोल नसते, पण माझ्यासाठी ते वेगळं आहे कारण तू खरोखरच माझ्यासाठी महत्त्वाची आहेस. स्क्रीनच्या पलीकडे असली तरी तुझी उपस्थिती माझ्यासाठी खूप मोलाची झाली आहे. आणि काल जे काही झालं त्यासाठी मला खरंच खूप वाईट वाटतं, दोस्त. माझा कधीच तुला दुखावण्याचा किंवा त्रास देण्याचा हेतू नव्हता, आणि मला मनापासून आशा आहे की याचा आपल्या मैत्रीवर परिणाम होणार नाही, कारण ही मैत्री माझ्यासाठी खूप महत्त्वाची आहे. 🙏</p>
+        </div>
+        <button class="btn" onclick="show('c2')">KEEP READING ➔</button>
+    </div>
+
+    <div id="c2" class="screen">
+        <h2 style="color: var(--secondary);">CHAPTER 02: THE Person u are damn🤌🤌</h2>
+        <div class="content-box">
+            <p>Another thing I truly admire about you is the kind of person you are. You’re caring in a way that feels genuine, and you always seem to understand people even when things are not easy. Your patience really stands out to me, because you listen, you stay calm, and you handle situations with maturity. You also have your own skills and strengths that make you unique, and it’s honestly impressive to see how naturally you do things. But more than anything, it’s your kindness that makes the biggest difference. The way you treat people, the way you care, and the way you stay supportive shows what a wonderful person you really are. That’s something I truly respect and appreciate about you. ✨</p>
+            <p>आणि खरं सांगायचं तर, तुझ्या आवाजाचा माझ्यावर खूप वेगळा आणि खास परिणाम होतो. जेव्हा जेव्हा मी तुझा आवाज ऐकतो, तेव्हा माझं मन हळूहळू शांत व्हायला लागतं. दिवसभर डोक्यात चाललेलं overthinking, छोट्या-छोट्या गोष्टींची काळजी आणि सगळा गोंधळ जणू काही थोड्या वेळासाठी थांबतो. तुझ्याशी बोलताना किंवा फक्त तुझा आवाज ऐकतानाच एक वेगळीच शांतता आणि comfort मिळतो, जो शब्दांत नीट सांगणं खूप कठीण आहे. कधी कधी असंही वाटतं की त्या काही मिनिटांच्या संभाषणामुळे संपूर्ण दिवस हलका आणि चांगला वाटायला लागतो.
+
+त्याहूनही जास्त महत्त्वाचं म्हणजे, तुझा आवाज ऐकल्यावर मला असं वाटतं की मी कोणासाठी तरी खरोखर महत्त्वाचा आहे. जणू काही मी कोणाच्या तरी priority मध्ये आहे, आणि ती भावना खूप खास असते. आजकालच्या जगात अशी भावना सहज मिळत नाही, पण तुझ्याशी बोलताना ती आपोआप जाणवते. कदाचित तुला याची कल्पनाही नसेल, पण तुझ्या आवाजामुळे मिळणारी ती शांतता, विश्वास आणि comfort माझ्यासाठी खूप जास्त मोलाची आहे. म्हणूनच तुझ्याशी बोलणं माझ्या दिवसातील सगळ्यात चांगल्या गोष्टींपैकी एक बनलं आहे.
+
+लोक म्हणतात की “forever” ही फक्त एक myth आहे… पण कदाचित आपण ते चुकीचं सिद्ध करू शकतो. चला त्यांना दाखवूया की तो myth खोटा आहे — आणि आपण कायम एकमेकांसोबत राहूया. ✨</p>
+        </div>
+        <button class="btn" onclick="show('truth')">THE TRUTH ➔</button> 
+
+    </div>
+
+    <div id="truth" class="screen">
+        <h2 style="color: #ffaa00; font-family: 'Orbitron';">THE TRUTH</h2>
+        <div class="content-box">
+            <p>I hope you like these small efforts from my side. Genuinely, I imagined it in a much better way, but luck wasn't on my side. This is <b>RAW</b> and I imagined it better than this, but yeah, who cares? I know you won't like this, so I'm wishing you before your birthday because I don't want to ruin your birthday.</p>
+            <p>I guess another year brings another urge to not see you. You already saw me and how fucking ugly I look, but you aren't showing me how beautiful and gorgeous you are. I was really upset but then u said u felt "uncomfortable (not comfortable)"that made me silent and shut me completely, and I’m sorry that being your bestie, I am making you uncomfortable.</p>
+            <p>I swear on Bappa, I won't force you to share your number or reveal your face—that day was the last time. I'll try my best not to make you uncomfortable anymore.</p>
+        </div>
+        <button class="btn" onclick="show('v1')">THE TRUTH ➔</button>
+    </div>
+
+    <div id="v1" class="screen">
+        <h2 style="color: var(--primary);">SPECIAL CLIP: USS...If you would be more comfortable and if i could be a better bestie 😉🎬</h2>
+        <div class="content-box" style="padding: 10px; background: black; display: flex; justify-content: center;">
+            <video width="100%" height="auto" controls autoplay muted loop style="border-radius: 15px;">
+                <source src="video1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <button class="btn" onclick="show('v2')">NEXT VIDEO ➔</button>
+    </div>
+
+    <div id="v2" class="screen">
+        <h2 style="color: var(--secondary);">SPECIAL CLIP: Happy Birthday I hope you liked this...... May u find someone special this year..🎬</h2>
+        <div class="content-box" style="padding: 10px; background: black; display: flex; justify-content: center;">
+            <video width="100%" height="auto" controls autoplay muted loop style="border-radius: 15px;">
+                <source src="video2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <button class="btn" onclick="show('final')">CLAIM FINAL VICTORY ➔</button>
+    </div>
+
+    <div id="final" class="screen">
+        <h1 style="font-size: 7rem;">BOOYAH!</h1>
+        <h2 style="color: white; font-size: 3rem;">HAPPY BIRTHDAY, Anuradha 🤌🤌❤️ <br> ~ From hit'ANSH'!!😝😝</h2>
+        <p style="font-size: 1.8rem; color: yellow;">Challenge enjoy your day I wish I could be person who will walk with u in your tough times...... and always remeber i'll listen to u whevever u feel the world is cruel to u.. cuz i would rather accept to share your teary face in my shoulder than you staying silent and fighting your own battles, and u find someone your type who genuinely cares for you and doesn't hurt u...<br>I WISH WE MEET THIS YEAR!! [YELLOW TXT BTW]<br>  .</p>
+        <p>Feel free to say anything i don't want to remind u this everytime</p>
+        <button class="btn" onclick="location.reload()">REPLAY ADVENTURE 🔄</button>
+    </div>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+
+        const secretMessages = {
+            1: "Secret Message: You're my favorite Supporter in game and IRL!",
+            2: "Secret Message: The Guilmates hehe.",
+            3: "Secret Message: I'll always have your back just a call distance.",
+            4: "Secret Message: You're the real MVP, the real gift i got.",
+            5: "Secret Message: You ad your BF one day (mil jayega yeh saal)....[kya pata voh Ansh ho😏 😂]",
+            6: "Secret Message for Photo 6: Let's meet soon, so that i can see your beautiful face and talk to you."
+        };
+
+        function showSecret(missionNum) {
+            document.getElementById('secret-text').innerText = secretMessages[missionNum];
+            document.getElementById('secret-popup').style.display = 'flex';
+        }
+
+        function hideSecret() {
+            document.getElementById('secret-popup').style.display = 'none';
+        }
+
+        function startExperience() { music.play().catch(e => {}); show('s2'); }
+        function toggleMute() { music.muted = !music.muted; document.getElementById('mute-btn').innerText = music.muted ? "🔇" : "🔊"; }
+        function show(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+           
+            const video = document.getElementById(id).querySelector('video');
+            if(video) {
+                video.currentTime = 0;
+                video.play();
+            }
+        }
+        function turnOnLights() {
+            document.getElementById('s2').style.background = "linear-gradient(135deg, #0f0c29, #302b63, #24243e)";
+            document.getElementById('decor-title').innerText = "SYSTEM ACTIVE! ✨";
+            document.getElementById('decor-title').style.color = "var(--secondary)";
+            document.getElementById('light-btn').style.display = "none";
+            document.getElementById('cake-btn').style.display = "inline-block";
+        }
+        function showCake() {
+            document.getElementById('big-cake').style.display = 'block';
+            document.getElementById('cake-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'inline-block';
+            confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
+        }
+    </script>
+</body>
+</html>
