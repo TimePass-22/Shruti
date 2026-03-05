@@ -2,14 +2,22 @@
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BOOYAH! Birthday Edition 🏆</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@400;900&family=Rowdies:wght@300;700&family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     
     <style>
-        
+        /* MOBILE SCALING FIXES - Only changes size, not content */
+        @media (max-width: 600px) {
+            h1 { font-size: 3.5rem !important; }
+            h2 { font-size: 1.8rem !important; }
+            .stat-item { width: 140px !important; }
+            .btn { font-size: 1.6rem !important; padding: 15px 30px !important; width: 90% !important; }
+            p { font-size: 1.1rem !important; }
+        }
+
         .screen {
          background-size: cover;
          background-position: center;
@@ -17,7 +25,6 @@
          position: relative;
         }
 
-  
         .screen::before {
           content: "";
          position: absolute;
@@ -26,7 +33,6 @@
          z-index: -1;
         }
 
-      
          #s1 { background-image: url('1.jpeg');background-position: center; }
          #s2 { background-image: url('10.jpg');background-position: center; }
          #final { background-image: url('6.jpeg'); }
@@ -47,14 +53,14 @@
             font-family: 'Rowdies', sans-serif; 
             overflow: hidden;
             text-align: center;
+            width: 100vw;
+            height: 100vh;
         }
 
-      
         h1 { font-family: 'Bangers', cursive; font-size: 5.5rem; color: var(--primary); text-shadow: 0 0 20px var(--primary), 5px 5px 0px #000; line-height: 1; margin-bottom: 20px; }
         h2 { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; color: var(--secondary); margin-bottom: 15px; }
         p { font-size: 1.4rem; color: #ccc; line-height: 1.4; max-width: 800px; }
 
-    
         .screen { 
             display: none; height: 100vh; width: 100vw;
             flex-direction: column; justify-content: center; align-items: center; 
@@ -65,34 +71,31 @@
 
         @keyframes zoomIn { from { opacity: 0; transform: scale(1.1); } to { opacity: 1; transform: scale(1); } }
 
-     
         .btn {
             background: var(--primary); color: white; border: none; padding: 20px 50px;
             font-family: 'Bangers'; font-size: 2.2rem; cursor: pointer; border-radius: 15px;
             box-shadow: 0 8px 0px #80002a, 0 0 30px rgba(255, 0, 85, 0.5);
             transition: 0.2s; margin-top: 30px; text-transform: uppercase; letter-spacing: 2px;
+            z-index: 10;
         }
         .btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 12px 0px #80002a, 0 0 50px rgba(255, 0, 85, 0.7); }
         .btn:active { transform: translateY(5px); box-shadow: 0 2px 0px #80002a; }
 
-       
         .content-box {
             background: var(--glass);
             backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 2px solid var(--secondary);
             padding: 30px;
             border-radius: 20px;
-            max-width: 750px;
+            max-width: 90%;
             text-align: left;
             font-family: 'Montserrat', sans-serif;
             overflow-y: auto;
             max-height: 70vh;
         }
-        .content-box p {
-            font-size: 1.2rem; color: #eee; margin-bottom: 20px; line-height: 1.6;
-        }
+        .content-box p { font-size: 1.2rem; color: #eee; margin-bottom: 20px; line-height: 1.6; }
 
-     
         .poetry-box {
             font-family: 'sans-serif' , cursive; font-size: 1.8rem; color: #fff;
             line-height: 1.4; text-align: center; padding: 35px;
@@ -103,7 +106,6 @@
         }
         .poetry-box p { margin-bottom: 25px; color: #fff; }
 
-       
         .mission-frame {
             width: 85%; max-width: 400px; height: 350px;
             border: 5px solid var(--primary); border-radius: 20px;
@@ -117,7 +119,6 @@
             padding: 5px 10px; border-radius: 10px; color: var(--secondary); font-family: 'Orbitron';
         }
 
-        
         #secret-popup {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center;
@@ -131,23 +132,24 @@
         .popup-box h3 { font-family: 'Bangers'; color: var(--primary); font-size: 2rem; margin-bottom: 15px; }
         .popup-box p { font-family: 'Montserrat'; font-size: 1rem; color: #fff; margin-bottom: 20px; }
 
-    
         .stats-wrap { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px; }
         .stat-item { background: #111; padding: 20px; border-radius: 15px; border-bottom: 4px solid var(--secondary); width: 220px; }
         .stat-val { font-size: 2.2rem; font-family: 'Bangers'; color: var(--secondary); }
 
         #mute-btn { position: fixed; bottom: 20px; left: 20px; z-index: 999; background: var(--primary); border: none; color: white; border-radius: 50%; width: 55px; height: 55px; font-size: 1.3rem; cursor: pointer; }
+
+        video { border-radius: 15px; width: 100%; height: auto; background: black; }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop><source src="JENNIE.mp3" type="audio/mpeg"></audio>
+    <audio id="bgMusic" loop preload="auto"><source src="JENNIE.mp3" type="audio/mpeg"></audio>
     <button id="mute-btn" onclick="toggleMute()">🔊</button>
 
     <div id="secret-popup" onclick="hideSecret()">
         <div class="popup-box" onclick="event.stopPropagation()">
             <h3>ENCRYPTED NOTE</h3>
-            <p id="secret-text">Secret message goes here.</p>
+            <p id="secret-text"></p>
             <button class="btn" style="padding: 10px 20px; font-size: 1.2rem; margin-top: 0;" onclick="hideSecret()">CLOSE</button>
         </div>
     </div>
@@ -228,7 +230,6 @@
     <div id="p1" class="screen">
         <h2 style="color: var(--primary);">Message for you:- </h2>
         <div class="poetry-box">
-            
                 We met in a game, just two strangers online,
              <br>No idea our talks would slowly align.<br>
              <br>From random matches to laughs every day,<br>
@@ -243,7 +244,6 @@
              <br>Please forget it and don’t let it push us away.<br>
              <br> Our friendship means more than I can explain,<br>
              <br> I promise it won’t ever happen again. 🙏✨ <br>
-        
         </div>
         <button class="btn" onclick="show('p2')">CONTINUE ➔</button>
     </div>
@@ -251,7 +251,6 @@
     <div id="p2" class="screen">
         <h2 style="color: var(--secondary);">Another one</h2>
         <div class="poetry-box">
-            
         <br>आपण एका गेममध्ये भेटलो, फक्त दोन अनोळखी ऑनलाइन,<br>
         <br>कधी वाटलंच नव्हतं की आपल्या गोष्टी हळूहळू जुळतील. <br>
         <br>रँडम मॅचेसपासून रोजच्या रात्रीच्या गप्पांपर्यंत,<br> 
@@ -290,7 +289,6 @@
 लोक म्हणतात की “forever” ही फक्त एक myth आहे… पण कदाचित आपण ते चुकीचं सिद्ध करू शकतो. चला त्यांना दाखवूया की तो myth खोटा आहे — आणि आपण कायम एकमेकांसोबत राहूया. ✨</p>
         </div>
         <button class="btn" onclick="show('truth')">THE TRUTH ➔</button> 
-
     </div>
 
     <div id="truth" class="screen">
@@ -305,10 +303,9 @@
 
     <div id="v1" class="screen">
         <h2 style="color: var(--primary);">SPECIAL CLIP: USS...If you would be more comfortable and if i could be a better bestie 😉🎬</h2>
-        <div class="content-box" style="padding: 10px; background: black; display: flex; justify-content: center;">
-            <video width="100%" height="auto" controls autoplay muted loop style="border-radius: 15px;">
+        <div class="content-box" style="padding: 10px; background: black;">
+            <video playsinline controls muted loop id="vid1">
                 <source src="video1.mp4" type="video/mp4">
-                Your browser does not support the video tag.
             </video>
         </div>
         <button class="btn" onclick="show('v2')">NEXT VIDEO ➔</button>
@@ -316,10 +313,9 @@
 
     <div id="v2" class="screen">
         <h2 style="color: var(--secondary);">SPECIAL CLIP: Happy Birthday I hope you liked this...... May u find someone special this year..🎬</h2>
-        <div class="content-box" style="padding: 10px; background: black; display: flex; justify-content: center;">
-            <video width="100%" height="auto" controls autoplay muted loop style="border-radius: 15px;">
+        <div class="content-box" style="padding: 10px; background: black;">
+            <video playsinline controls muted loop id="vid2">
                 <source src="video2.mp4" type="video/mp4">
-                Your browser does not support the video tag.
             </video>
         </div>
         <button class="btn" onclick="show('final')">CLAIM FINAL VICTORY ➔</button>
@@ -354,18 +350,32 @@
             document.getElementById('secret-popup').style.display = 'none';
         }
 
-        function startExperience() { music.play().catch(e => {}); show('s2'); }
-        function toggleMute() { music.muted = !music.muted; document.getElementById('mute-btn').innerText = music.muted ? "🔇" : "🔊"; }
+        function startExperience() { 
+            music.play().catch(e => { console.log("Audio play blocked") }); 
+            show('s2'); 
+        }
+
+        function toggleMute() { 
+            music.muted = !music.muted; 
+            document.getElementById('mute-btn').innerText = music.muted ? "🔇" : "🔊"; 
+        }
+
         function show(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-           
-            const video = document.getElementById(id).querySelector('video');
-            if(video) {
-                video.currentTime = 0;
-                video.play();
+            const target = document.getElementById(id);
+            target.classList.add('active');
+            
+            // Handle Video autoplay on screen switch
+            const videos = document.querySelectorAll('video');
+            videos.forEach(v => v.pause());
+            
+            const currentVideo = target.querySelector('video');
+            if(currentVideo) {
+                currentVideo.currentTime = 0;
+                currentVideo.play().catch(e => { console.log("Video block") });
             }
         }
+
         function turnOnLights() {
             document.getElementById('s2').style.background = "linear-gradient(135deg, #0f0c29, #302b63, #24243e)";
             document.getElementById('decor-title').innerText = "SYSTEM ACTIVE! ✨";
@@ -373,6 +383,7 @@
             document.getElementById('light-btn').style.display = "none";
             document.getElementById('cake-btn').style.display = "inline-block";
         }
+
         function showCake() {
             document.getElementById('big-cake').style.display = 'block';
             document.getElementById('cake-btn').style.display = 'none';
